@@ -6,10 +6,18 @@ use App\Models\Estado;
 
 class EstadoRepository extends BaseRepository {
 
+
     public function __construct(Estado $estado)
     {
         parent::__construct($estado);
     }
 
+
+    public function allWithImage(){
+        $estados = $this->model->with('image')->get();
+
+        return $estados;
+
+    }
 
 }

@@ -8,7 +8,7 @@ class BaseRepository{
 
 
     protected $model;
-
+    private $relations;
     public function __construct(Model $model)
     {
         $this->model = $model;
@@ -19,12 +19,15 @@ class BaseRepository{
     public function all()
     {
         $query = $this->model;
+
+       
+
         return $query->get();
     }
 
     public function get(int $id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($id);
     }
 
     public function save(Model $model)
@@ -34,6 +37,11 @@ class BaseRepository{
         return $model;
     }
 
+    public function updateDB($datos, int $id){
+        return $this->model->where('id','=',$id)->update($datos);
+    }
+
+  
     public function delete(Model $model)
     {
         $model->delete();
