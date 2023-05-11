@@ -96,7 +96,6 @@ class EstadoController extends Controller
         //Se coloca el SLUG
         $datos['slug'] = Str::slug($request->nombre);
 
-
         // Revisa si se envia la imagen
         if($request->hasFile('image')){
 
@@ -106,22 +105,34 @@ class EstadoController extends Controller
             //Eliminamos la imagen de Disco
             Storage::delete('public/'.$imageFind->ruta);
 
-    
             // Guardamos la imagen en Disco
             $image['ruta'] = $request->file('image')->store('estados','public');
             $image['id'] = $imageFind->id;
 
             //Guardamos la imagen a base de datos
-            $this->imageReository->updateDB($image,$imageFind->id);
-            
-            
+            $this->imageReository->updateDB($image,$imageFind->id);       
         }
-
-
         //Se guarda en Base de Datos el Estado
         $this->estadoRepository->updateDB($datos,$id);
 
         return redirect()->route('estados.edit',$id);
     }
 
+
+
+    public function destroy($id){
+
+        $estado = $this->estadoRepository->get($id);
+        $image = $this->imageReository->get($estado->id_image);
+
+        Storage::delete('public/'.$image->ruta);
+
+
+        if($estado){
+            $estado->delete();
+        }
+
+        
+        return redirect()->route("admin.estados");
+    }
 }
