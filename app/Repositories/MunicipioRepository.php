@@ -13,7 +13,8 @@ class MunicipioRepository extends BaseRepository{
 
 
     public function allWithImageAndEstadoPaginate(){
-        $municipio = $this->model->with(['estado','image'])->paginate(10);
+        $municipio = $this->model->with(['estado','image'])->paginate(20);
+
 
         return $municipio;
     }

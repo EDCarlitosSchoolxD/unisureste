@@ -44,3 +44,6 @@ Route::delete("/admin/estados/{id}",[EstadoController::class,'destroy'])->name("
 Route::get("/admin/municipios",[MunicipioController::class,'index'])->name("admin.municipios");
 Route::get("/admin/municipios/create",[MunicipioController::class,'create'])->name("municipios.create");
 Route::post("/admin/municipios/",[MunicipioController::class,'store'])->name("municipios.store");
+Route::delete("/admin/municipios/{id}",[MunicipioController::class,'destroy'])->name("municipios.destroy");
+Route::get("/admin/municipios/{id}/edit",[MunicipioController::class,'edit'])->name("municipios.edit");
+Route::put("/admin/municipios/{id}",[MunicipioController::class,'update'])->name("municipios.update");

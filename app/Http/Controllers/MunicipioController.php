@@ -9,6 +9,7 @@ use App\Repositories\EstadoRepository;
 use App\Repositories\ImageRepository;
 use App\Repositories\MunicipioRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class MunicipioController extends Controller
@@ -27,8 +28,8 @@ class MunicipioController extends Controller
 
     //
     public function index(){
-
-        return view('admin.municipios.index');
+        $data = $this->municipioRepository->allWithImageAndEstadoPaginate();
+        return view('admin.municipios.index',["data" => $data]);
     }
 
     public function create(){
@@ -37,7 +38,12 @@ class MunicipioController extends Controller
         return view('admin.municipios.create',["estados" => $estados]);
     }
 
+    public function edit($id){
+        $estados = $this->estadoRepository->all();
+        $data = $this->municipioRepository->get($id);
 
+        return view('admin.municipios.edit',["estados" => $estados,"data"=>$data,"id"=>$id]);
+    }
 
     public function store(Request $request){
         $request->validate([
@@ -70,6 +76,58 @@ class MunicipioController extends Controller
         return redirect()->route('admin.municipios');
     }
 
+    public function destroy($id){
+
+        $municipio = $this->municipioRepository->get($id);
+        $image = $this->imageRepository->get($municipio->id_image);
+        
+
+
+        if(Storage::delete('public/'.$image->ruta)){
+            $municipio->delete();
+        }
+
+        return redirect()->route("admin.municipios");
+
+    }
+
+    public function update(Request $request,$id){
+        $this->validate($request,[
+            'nombre' => ['required'],
+            'image' => ['image'],
+            'id_estado' => ["required","integer"]
+        ]);
+
+        $municipioFind = $this->municipioRepository->get($id);
+
+        $datos = request()->except('_token','_method','image');
+
+        // Setteamos los valores
+        $datos['id_image'] = $municipioFind->id_image;
+        //Se coloca el SLUG
+        $datos['slug'] = Str::slug($request->nombre);
+
+        if($request->hasFile('image')){
+
+
+            //Buscamos la imagen en la base de datos
+            $imageFind = $this->imageRepository->get($municipioFind->id_image);
+
+            //Eliminamos la imagen de Disco
+            Storage::delete('public/'.$imageFind->ruta);
+
+            // Guardamos la imagen en Disco
+            $image['ruta'] = $request->file('image')->store('municipios','public');
+            $image['id'] = $imageFind->id;
+
+            //Guardamos la imagen a base de datos
+            $this->imageRepository->updateDB($image,$imageFind->id);       
+        }
+        $this->municipioRepository->updateDB($datos,$id);
+        return redirect()->route('municipios.edit',$id);
+    }
+
+    
 
     public function allPaginate(){
         return $this->municipioRepository->allWithImageAndEstadoPaginate();

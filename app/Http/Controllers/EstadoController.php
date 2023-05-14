@@ -42,7 +42,7 @@ class EstadoController extends Controller
         
         $data = $this->estadoRepository->get($id);
         
-        return view("admin.estados.edit",["data" => $data]);
+        return view("admin.estados.edit",["data" => $data,"id"=>$id]);
     }
 
 

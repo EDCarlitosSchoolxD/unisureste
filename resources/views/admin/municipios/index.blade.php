@@ -56,28 +56,33 @@
                 </tr>
             </thead>
             <tbody id="body-table">
+
+                @foreach ($data as $municipio)
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        {{$municipio->nombre}}
+                    </td>
                     
-                
-                
-                
+                    <td class="w-32 h-32">
+                        <img class="w-full h-full object-contain" src="{{asset("storage/".$municipio->image->ruta)}}"  alt="Apple Watch">
+                    </td>
+                    
+                    <td class="px-6 py-4">
+                        <button data-modal-target="popup-modal" onclick="changeActionDelete({{$municipio->id}})" data-modal-toggle="popup-modal" class="font-medium text-red-600 dark:text-red-500 hover:underline" type="button">
+                            Eliminar
+                          </button>
+                        <a href="{{route("municipios.edit",$municipio->id)}}">Editar</a>
+                    </td>
+                </tr> 
+                @endforeach  
+
             </tbody>
         </table>
     </div>
 </div>
 
 <div  class="w-3/4 m-auto mt-5 text-center">
-    <nav  aria-label="Page navigation example">
-        <ul id="links" class="inline-flex -space-x-px">
-        
-        
-        <li>
-            <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-        </li>
-        <li>
-            <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-        </li>
-        </ul>
-    </nav>
+        {{$data->links()}}     
 </div>
 
     
@@ -88,62 +93,8 @@
     function changeActionDelete(id){
         const form = document.getElementById("form-delete");
 
-        form.action = `{{ route("estados.destroy", "") }}/${id}`
+        form.action = `{{ route("municipios.destroy", "") }}/${id}`
     }
-
-
-    async function fetchData($page = 1){
-        const peticion = await fetch("http://localhost:8000/api/municipios")
-        const data = await peticion.json();
-
-        console.log(data);
-        return data;
-    }
-
-
-    async function showData(){
-        const bodyTable = document.getElementById("body-table");
-        const linksContainer = document.getElementById("links");
-
-        const data = await fetchData();
-
-        console.log(data.data);
-
-        data.data.forEach(element => {
-
-            bodyTable.innerHTML += `
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                        ${element.nombre}
-                    </td>
-                    
-                    <td class="w-32 h-32">
-                        <img class="w-full h-full object-contain" src="{{asset('')}}storage/${element.image.ruta}"  alt="Apple Watch">
-                    </td>
-                    
-                    <td class="px-6 py-4">
-                        <button data-modal-target="popup-modal" onclick="changeActionDelete()" data-modal-toggle="popup-modal" class="font-medium text-red-600 dark:text-red-500 hover:underline" type="button">
-                            Eliminar
-                          </button>
-                        <a href="">Editar</a>
-                    </td>
-                </tr>`;
-        });
-
-        if(links[0].url != null ){
-            linksContainer.innerHTML += `<li>
-                <a href="" onClick="showData" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-            </li>`
-        }
-        
-
-        data.links[0].innerHTML += 
-
-        console.log(data.links);
-
-    }
-
-    showData();
 
 </script>
 
