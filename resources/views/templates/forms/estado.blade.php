@@ -1,5 +1,5 @@
 <div class="mb-6">
-    <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del estado</label>
+    <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del Municipio</label>
     <input 
   
     @if (old('nombre'))

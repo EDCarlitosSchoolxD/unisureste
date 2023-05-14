@@ -20,11 +20,10 @@ return new class extends Migration
             $table->string('nombre',255)->unique();
             $table->unsignedBigInteger('id_image');
             $table->text('slug')->unique();
-            $table->longText('image');
 
+            
 
             $table->foreign('id_image')->references('id')->on('images')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

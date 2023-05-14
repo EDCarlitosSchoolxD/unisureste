@@ -15,13 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nombre',255);
             $table->text('slug');
-            $table->unsignedBigInteger('id_estado');
+            $table->unsignedBigInteger('id_estado')->nullable();
             $table->unsignedBigInteger('id_image');
-            $table->longText('image');
-            $table->timestamps();
 
             $table->foreign('id_image')->references('id')->on('images')->onDelete('cascade');
-            $table->foreign('id_estado')->references('id')->on('estados')->onDelete('cascade');
+            $table->foreign('id_estado')->references('id')->on('estados')->onDelete('set null');
         });
     }
 
