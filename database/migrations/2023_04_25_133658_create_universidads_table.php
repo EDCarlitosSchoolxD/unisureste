@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('nombre',255)->unique();
 
             $table->string('tipo');//Privada o publica
-            $table->text('url_web');
+            $table->text('url_web')->nullable();
             $table->text('slug')->unique();
 
             //$table->text('image');
             //$table->integer('likes');
             
-            $table->text("mision");
-            $table->text("vision");
-            $table->text("objetivos");
+            $table->text("mision")->nullable();
+            $table->text("vision")->nullable();
+            $table->text("objetivos")->nullable();
             //Google Maps
             $table->string('latitud',255);
             $table->string('longitud',255);

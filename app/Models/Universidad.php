@@ -17,8 +17,7 @@ class Universidad extends Model
         return $this->belongsTo(Municipio::class,'id_municipio');
     }
 
-
-    public function universidades(){
-        return $this->hasMany(Universidad::class);
+    public function images(){
+        return $this->hasMany(ImageUniversidad::class,'id_universidad','id');
     }
 }
