@@ -53,3 +53,4 @@ Route::put("/admin/municipios/{id}",[MunicipioController::class,'update'])->name
 Route::get("/admin/universidades",[UniversidadController::class,'index'])->name("admin.universidades")->middleware("auth");
 Route::get("/admin/universidades/create",[UniversidadController::class,'create'])->name("universidades.create")->middleware("auth");
 Route::post("/admin/universidades/",[UniversidadController::class,'store'])->name("universidades.store")->middleware("auth");
+Route::delete("/admin/universidades/{id}",[UniversidadController::class,'destroy'])->name("universidades.destroy")->middleware("auth");

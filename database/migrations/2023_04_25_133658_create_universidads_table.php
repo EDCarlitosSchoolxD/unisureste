@@ -25,13 +25,14 @@ return new class extends Migration
             $table->text("mision")->nullable();
             $table->text("vision")->nullable();
             $table->text("objetivos")->nullable();
-            //Google Maps
+            // Maps
             $table->string('latitud',255);
             $table->string('longitud',255);
 
-            $table->unsignedBigInteger('id_municipio');
 
-            $table->foreign('id_municipio')->references('id')->on('municipios')->onDelete('cascade');
+            $table->unsignedBigInteger('id_municipio')->nullable();
+
+            $table->foreign('id_municipio')->references('id')->on('municipios')->onDelete('set null');
 
             //HACER UNA RELACION MUCHOS A MUCHOS
 

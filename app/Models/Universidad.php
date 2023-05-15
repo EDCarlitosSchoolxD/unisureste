@@ -18,6 +18,7 @@ class Universidad extends Model
     }
 
     public function images(){
-        return $this->hasMany(ImageUniversidad::class,'id_universidad','id');
+        return $this->hasMany(ImagenesUniversidad::class,'id_universidad','id');
     }
+
 }

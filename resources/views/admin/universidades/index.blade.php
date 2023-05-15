@@ -61,7 +61,27 @@
                 </tr>
             </thead>
             <tbody id="body-table">
-
+                @foreach ($datos as $universidad)
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        {{$universidad->nombre}}
+                    </td>
+                    
+                    <td class="w-32 h-32">
+                        <img class="w-full h-full object-contain" src="{{asset("storage/".$universidad->images[0]->ruta)}}"  alt="Apple Watch">
+                    </td>
+                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        {{$universidad->municipio->nombre}}
+                    </td>
+                    
+                    <td class="px-6 py-4">
+                        <button data-modal-target="popup-modal" onclick="changeActionDelete({{$universidad->id}})" data-modal-toggle="popup-modal" class="font-medium text-red-600 dark:text-red-500 hover:underline" type="button">
+                            Eliminar
+                          </button>
+                        <a href="{{route("estados.edit",$universidad->id)}}">Editar</a>
+                    </td>
+                </tr> 
+                @endforeach
                
 
             </tbody>
@@ -79,7 +99,7 @@
     function changeActionDelete(id){
         const form = document.getElementById("form-delete");
 
-        form.action = `{{ route("municipios.destroy", "") }}/${id}`
+        form.action = `{{ route("universidades.destroy", "") }}/${id}`
     }
 
 </script>

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\ImagenesUniversidad;
 use App\Models\ImageUniversidad;
 use App\Models\Universidad;
 use App\Repositories\EstadoRepository;
 use App\Repositories\ImageRepository;
+use App\Repositories\ImageUniversidad as RepositoriesImageUniversidad;
 use App\Repositories\ImageUniversidadRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\UniversidadRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 class UniversidadController extends Controller
@@ -35,7 +38,9 @@ class UniversidadController extends Controller
 
     public function index(){
         
-        return view("admin.universidades.index");
+        $datos = $this->universidadRepository->allWithOneImage();
+        
+        return view("admin.universidades.index",["datos"=>$datos]);
     }
 
     public function create(){
@@ -76,18 +81,11 @@ class UniversidadController extends Controller
 
                 // Guardamos la imagen
                 $imageD['ruta'] = $image->store('universidades','public');
-                $imageObj = new Image($imageD);
+                $imageObj = new ImagenesUniversidad($imageD);
                 //Guardamos la imagen a base de datos
-                $this->imageRepository->save($imageObj);
+                $imageObj["id_universidad"] = $universidad->id;
+                $this->imageUniversidadRepository->save($imageObj);
 
-                //Creamos un Objeto ImageUniversidad y colocamos el ID de la image
-
-                $imageUniversidad = new ImageUniversidad();
-                $imageUniversidad->id_image = $imageObj->id;
-                $imageUniversidad->id_universidad = $universidad->id;
-
-                //Se guarda en Base de Datos el Municipio
-                $this->imageUniversidadRepository->save($imageUniversidad);
 
             }
 
@@ -98,4 +96,21 @@ class UniversidadController extends Controller
 
         
     }
+
+    public function destroy($id){
+        $universidad = $this->universidadRepository->get($id);
+
+        $images = $this->imageUniversidadRepository->getWhereIdUniversidad($universidad->id);
+        
+
+        foreach($images as $image){
+            Storage::delete("public/".$image->ruta);
+        }
+        $universidad->delete();
+
+
+        return redirect()->route("admin.universidades");
+    }
+
 }
+
