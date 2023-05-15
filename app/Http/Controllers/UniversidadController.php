@@ -87,6 +87,12 @@ class UniversidadController extends Controller
         $datosRequest["slug"] = Str::slug($request->nombre);
 
 
+        if($request->hasFile('logo')){
+            // Guardamos la imagen en Disco
+            $datosRequest['logo'] = $request->file('logo')->store('estados','public');
+
+        }
+
         if($request->hasFile('image')){
             $universidad = new Universidad($datosRequest);
             $universidad = $this->universidadRepository->save($universidad);
@@ -123,8 +129,16 @@ class UniversidadController extends Controller
         $universidadFind = $this->universidadRepository->get($id);
         $images = $this->imageUniversidadRepository->getWhereIdUniversidad($universidadFind->id);
 
-        $datos = $request->except("_token","_method","image","id_estado");
+        $datos = $request->except("_token","_method","image","id_estado",'logo');
         $datos['slug'] = Str::slug($request->nombre);
+
+
+        if($request->hasFile('logo')){
+            // Guardamos la imagen en Disco
+            Storage::delete("public/".$universidadFind->logo);
+            $datos['logo'] = $request->file('logo')->store('universidades','public');
+
+        }
 
         if($request->hasFile("image")){
             //Borramos todas las imagenes
@@ -155,6 +169,8 @@ class UniversidadController extends Controller
 
         $images = $this->imageUniversidadRepository->getWhereIdUniversidad($universidad->id);
         
+        Storage::delete("public/".$universidad->logo);
+
 
         foreach($images as $image){
             Storage::delete("public/".$image->ruta);

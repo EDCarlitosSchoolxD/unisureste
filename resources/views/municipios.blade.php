@@ -40,7 +40,7 @@
             @foreach ($datos->municipios as $municipio)
             <div class="col-md-3">
                 <div class="card">
-                    <a href="universidades/benito/index.php"><img class="card-img-top" src="{{asset("storage/".$municipio->image->ruta)}}" alt="{{$municipio->nombre}}"></a>
+                    <a href="{{route("municipio.universidades",$municipio->slug)}}"><img class="card-img-top" src="{{asset("storage/".$municipio->image->ruta)}}" alt="{{$municipio->nombre}}"></a>
                     <div class="card-body">
                         <center><h4 class="card-title">{{$municipio->nombre}}</h4></center>
                     </div>

@@ -18,4 +18,12 @@ class MunicipioRepository extends BaseRepository{
 
         return $municipio;
     }
+
+
+    public function getUniversidadesWhereSlug($slug){
+        $municipio = $this->model->with(["universidades"])
+        ->where("slug",'=',$slug)
+        ->first();
+        return $municipio;
+    }
 }

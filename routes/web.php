@@ -58,3 +58,5 @@ Route::put("/admin/universidades/{id}",[UniversidadController::class,'update'])-
 
 Route::get("/",[ViewRenderController::class,'home'])->name("home");
 Route::get("/{slug}",[ViewRenderController::class,'municipios'])->name("municipios");
+Route::get("/{slug}/universidades",[ViewRenderController::class,"universidades"])->name("municipio.universidades");
+Route::get("/universidad/{slug}",[ViewRenderController::class,'universidad'])->name("universidad");

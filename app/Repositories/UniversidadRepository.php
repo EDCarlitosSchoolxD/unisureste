@@ -28,6 +28,10 @@ class UniversidadRepository extends BaseRepository {
        ->paginate(15);
 
     }
+
+    public function getCarrerasWhereSlug($slug){
+        return $this->model->with(["images","carreras"])->where("slug",'=',$slug)->first();
+    }
    
 
 }

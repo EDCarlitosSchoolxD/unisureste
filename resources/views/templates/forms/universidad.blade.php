@@ -136,10 +136,14 @@
 </div>
 
 <div class="mb-6">
-    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="user_avatar">Imagen</label>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="user_avatar">Imagenes carusel</label>
     <input name="image[]" multiple class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" id="user_avatar" type="file">
 </div>
 
+<div class="mb-6">
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="logo">Imagen Logo</label>
+    <input name="logo" multiple class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" id="user_avatar" type="file">
+</div>
 <div class="flex w-4/5 mx-auto justify-center flex-wrap gap-4">
     <div class="flex flex-col mb-4">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="url_web">Latitud:</label>
@@ -208,8 +212,8 @@
     const longitudDom = document.getElementById('longitud');
     const estadoDom = document.getElementById('estado');
     const municipiosDom = document.getElementById('id_municipio')
-    let latitud = {{$data->latitud}} || 23.5540767 ;
-    let longitud = {{$data->longitud}} || -102.6205;
+    let latitud = {{isset($data->latitud)?$data->latitud:0}}  || 23.5540767 ;
+    let longitud = {{isset($data->longitud)?$data->latitud:0}}  || -102.6205;
 
     const MUNICIPIOS = {!!json_encode($municipios)!!};
 
@@ -227,7 +231,7 @@
     let marker;
     if(latitud && longitud){
         marker = L.marker([latitud,longitud]).addTo(map);
-        marker.bindPopup(`<h1>{{$data->nombre}}</h1>`).openPopup();
+        marker.bindPopup(`<h1>{{isset($data->nombre)?$data->nombre:"Selecciona una locacion"}}</h1>`).openPopup();
     }
 
     estadoDom.addEventListener('change',changeMunicipios)

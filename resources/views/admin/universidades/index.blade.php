@@ -68,10 +68,15 @@
                     </td>
                     
                     <td class="w-32 h-32">
-                        <img class="w-full h-full object-contain" src="{{asset("storage/".$universidad->images[0]->ruta)}}"  alt="Apple Watch">
+                        <img class="w-full h-full object-contain" src="{{asset("storage/".$universidad->logo)}}"  alt="Apple Watch">
                     </td>
                     <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                        {{$universidad->municipio->nombre}}
+                        @if (isset($universidad->municipio))
+                            {{$universidad->municipio->nombre}}
+                            
+                        @else
+                            null                            
+                        @endif
                     </td>
                     
                     <td class="px-6 py-4">

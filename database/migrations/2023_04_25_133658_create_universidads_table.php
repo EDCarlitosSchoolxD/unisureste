@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('latitud',255);
             $table->string('longitud',255);
 
+            $table->string("logo");
 
             $table->unsignedBigInteger('id_municipio')->nullable();
 
