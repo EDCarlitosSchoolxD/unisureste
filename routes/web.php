@@ -54,3 +54,5 @@ Route::get("/admin/universidades",[UniversidadController::class,'index'])->name(
 Route::get("/admin/universidades/create",[UniversidadController::class,'create'])->name("universidades.create")->middleware("auth");
 Route::post("/admin/universidades/",[UniversidadController::class,'store'])->name("universidades.store")->middleware("auth");
 Route::delete("/admin/universidades/{id}",[UniversidadController::class,'destroy'])->name("universidades.destroy")->middleware("auth");
+Route::get("/admin/universidades/{id}/edit",[UniversidadController::class,'edit'])->name("universidades.edit")->middleware("auth");
+Route::put("/admin/universidades/{id}",[UniversidadController::class,'update'])->name("universidades.update")->middleware("auth");

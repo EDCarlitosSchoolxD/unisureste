@@ -43,6 +43,22 @@ class UniversidadController extends Controller
         return view("admin.universidades.index",["datos"=>$datos]);
     }
 
+    public function edit($id){
+        $municipios = $this->municipioRepository->all();
+        $estados = $this->estadoRepository->all();
+
+        $data = $this->universidadRepository->get($id);
+
+        
+        return view("admin.universidades.edit",[
+            "estados" => $estados,
+            "municipios" => $municipios,
+            "tipos" => self::TIPOS,
+            "data" => $data,
+            "id" => $id,
+        ]);
+    }
+
     public function create(){
         $municipios = $this->municipioRepository->all();
         $estados = $this->estadoRepository->all();
@@ -78,7 +94,6 @@ class UniversidadController extends Controller
 
             foreach ($request->file("image") as $image) {
                
-
                 // Guardamos la imagen
                 $imageD['ruta'] = $image->store('universidades','public');
                 $imageObj = new ImagenesUniversidad($imageD);
@@ -86,15 +101,53 @@ class UniversidadController extends Controller
                 $imageObj["id_universidad"] = $universidad->id;
                 $this->imageUniversidadRepository->save($imageObj);
 
-
             }
 
             return redirect()->route('admin.universidades');
             
         }
+    }
 
+    public function update(Request $request, $id){
+        $request->validate([
+            "nombre" => ["required"],
+            "tipo" => ["required",Rule::in(self::TIPOS)],
+            "url_web" => ["url"],
+            "id_municipio" => ["required","integer"],
+            "image" => ["array"],
+            "images.*" => ["image"],
+            "latitud" => ["required"],
+            "longitud" => ["required"],
+        ]);
 
+        $universidadFind = $this->universidadRepository->get($id);
+        $images = $this->imageUniversidadRepository->getWhereIdUniversidad($universidadFind->id);
+
+        $datos = $request->except("_token","_method","image","id_estado");
+        $datos['slug'] = Str::slug($request->nombre);
+
+        if($request->hasFile("image")){
+            //Borramos todas las imagenes
+            foreach ($images as $image) {
+                Storage::delete("public/".$image->ruta);
+                $image->delete();
+            }
+
+            // Guardamos las imagenes
+            foreach($request->file("image") as $image){
+                // Guardamos la imagen
+                $imageD['ruta'] = $image->store('universidades','public');
+                $imageObj = new ImagenesUniversidad($imageD);
+                //Guardamos la imagen a base de datos
+                $imageObj["id_universidad"] = $universidadFind->id;
+                $this->imageUniversidadRepository->save($imageObj);
+            }
+        }
+
+        $this->universidadRepository->updateDB($datos,$id);
+        return redirect()->route('universidades.edit',$id);
         
+
     }
 
     public function destroy($id){

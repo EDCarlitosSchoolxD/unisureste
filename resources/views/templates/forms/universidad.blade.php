@@ -208,10 +208,12 @@
     const longitudDom = document.getElementById('longitud');
     const estadoDom = document.getElementById('estado');
     const municipiosDom = document.getElementById('id_municipio')
+    let latitud = {{$data->latitud}} || 23.5540767 ;
+    let longitud = {{$data->longitud}} || -102.6205;
 
     const MUNICIPIOS = {!!json_encode($municipios)!!};
 
-    let map = L.map('map').setView([23.5540767, -102.6205], 5)
+    let map = L.map('map').setView([latitud, longitud], 6)
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -223,12 +225,16 @@
     map.on('click',onMapClick);
 
     let marker;
+    if(latitud && longitud){
+        marker = L.marker([latitud,longitud]).addTo(map);
+        marker.bindPopup(`<h1>{{$data->nombre}}</h1>`).openPopup();
+    }
 
     estadoDom.addEventListener('change',changeMunicipios)
 
     function onMapClick(e){
-        const latitud = e.latlng.lat;
-        const longitud = e.latlng.lng;
+        latitud = e.latlng.lat;
+        longitud = e.latlng.lng;
 
         console.log({latitud,longitud});
 

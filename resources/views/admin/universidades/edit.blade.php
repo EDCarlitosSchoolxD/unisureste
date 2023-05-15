@@ -9,11 +9,7 @@
         </a>
     </div>
 
-
-    <section class="w-2/4 m-auto shadow-xl p-10 rounded-lg mt-5"  >
-
-        
-
+    <section class="w-2/4 m-auto shadow-xl p-10 rounded-lg mt-10" >
 
         <div class="">
             @foreach ($errors->all() as $error)
@@ -23,11 +19,14 @@
             @endforeach
         </div>
 
-        <form id="formulario" enctype="multipart/form-data" action="{{route("universidades.store")}}" method="POST" >
+        <form id="formulario" enctype="multipart/form-data" action="{{route("universidades.update",$id)}}" method="POST" >
+            @method("PUT")
             @csrf
             @include('templates.forms.universidad')
             
-            <button id="enviar" type="submit" class="mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar</button>
+            <button id="enviar" type="submit" class="mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Modificar
+            </button>
           
             
         </form>
@@ -48,6 +47,6 @@
 
         })
 
-</script>
+    </script>
 
 @endsection

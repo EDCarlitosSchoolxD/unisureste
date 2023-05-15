@@ -78,7 +78,7 @@
                         <button data-modal-target="popup-modal" onclick="changeActionDelete({{$universidad->id}})" data-modal-toggle="popup-modal" class="font-medium text-red-600 dark:text-red-500 hover:underline" type="button">
                             Eliminar
                           </button>
-                        <a href="{{route("estados.edit",$universidad->id)}}">Editar</a>
+                        <a href="{{route("universidades.edit",$universidad->id)}}">Editar</a>
                     </td>
                 </tr> 
                 @endforeach
