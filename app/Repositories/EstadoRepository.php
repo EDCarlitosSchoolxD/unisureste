@@ -19,7 +19,11 @@ class EstadoRepository extends BaseRepository {
         return $estados;
 
     }
-
+    public function getWhereSlug($slug){
+        return $this->model->with(['image','municipios' => function($query){
+            $query->with("image");
+        }])->where("slug",'=',$slug)->first();
+    }
    
 
 }

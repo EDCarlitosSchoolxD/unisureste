@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\UniversidadController;
+use App\Http\Controllers\ViewRenderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 Route::view("/admin",'admin.dashboard')->name("dashboard")->middleware('auth');
@@ -56,3 +54,7 @@ Route::post("/admin/universidades/",[UniversidadController::class,'store'])->nam
 Route::delete("/admin/universidades/{id}",[UniversidadController::class,'destroy'])->name("universidades.destroy")->middleware("auth");
 Route::get("/admin/universidades/{id}/edit",[UniversidadController::class,'edit'])->name("universidades.edit")->middleware("auth");
 Route::put("/admin/universidades/{id}",[UniversidadController::class,'update'])->name("universidades.update")->middleware("auth");
+
+
+Route::get("/",[ViewRenderController::class,'home'])->name("home");
+Route::get("/{slug}",[ViewRenderController::class,'municipios'])->name("municipios");
