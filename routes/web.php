@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\UniversidadController;
@@ -56,7 +57,14 @@ Route::get("/admin/universidades/{id}/edit",[UniversidadController::class,'edit'
 Route::put("/admin/universidades/{id}",[UniversidadController::class,'update'])->name("universidades.update")->middleware("auth");
 
 
+Route::get("/admin/universidades/{id}/carrera/create",[CarreraController::class,'create'])->name("carrera.create")->middleware("auth");
+Route::post("/admin/universidad/{id}/carrera",[CarreraController::class,'store'])->name("carrera.store")->middleware("auth");
+Route::get("/admin/universidad/carrera/{id}/edit",[CarreraController::class,'edit'])->name("carrera.edit")->middleware("auth");
+Route::put("/admin/universidades/{id}/carrera",[CarreraController::class,'update'])->name("carrera.update")->middleware("auth");
+Route::delete("/admin/carrera/{id}",[CarreraController::class,'destroy'])->name("carrera.destroy")->middleware("auth");
+
 Route::get("/",[ViewRenderController::class,'home'])->name("home");
 Route::get("/{slug}",[ViewRenderController::class,'municipios'])->name("municipios");
 Route::get("/{slug}/universidades",[ViewRenderController::class,"universidades"])->name("municipio.universidades");
 Route::get("/universidad/{slug}",[ViewRenderController::class,'universidad'])->name("universidad");
+Route::get("/universidad/{slug}/carrera/{slug2}",[ViewRenderController::class,'carrera'])->name("carrera");

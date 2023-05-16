@@ -4,7 +4,7 @@
 
 
     <div class="w-3/4 m-auto mt-5 mb-5">
-        <a href="{{route('universidades.create')}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Añadir universidades</a>
+        <a style="background-color:#8D4A57;" href="{{route('universidades.create')}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Añadir universidades</a>
     </div>
 
     
@@ -84,6 +84,7 @@
                             Eliminar
                           </button>
                         <a href="{{route("universidades.edit",$universidad->id)}}">Editar</a>
+                        <a href="{{route("universidad",$universidad->slug)}}">Ver mas</a>
                     </td>
                 </tr> 
                 @endforeach

@@ -1,7 +1,6 @@
 @include("templates.cabecera")
 
 
-
 <div id="carouselExampleControls"  class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         @for ($i = 0; $i < count($datos->images); $i++)
@@ -28,8 +27,13 @@
     <div class="row">
 
 
-
-       
+      @auth
+      <div class="w-3/4 m-auto mt-5 mb-5">
+        <a style="background-color:#8D4A57;" href="{{route('carrera.create',$datos->id)}}" class="p-3 text-white btn">Añadir Carrera</a>
+      </div>
+      @endauth
+      
+      
       <center> <h1 class="display-3"><br><b>Universidad del Caribe</b><br><br></h1> </center>
 
 
@@ -72,29 +76,37 @@
   <center><h1 class="title"><br><br>Carreras<br><br></h3></center>
 
 
-    <div class="col-md-3">
-      <div class="card">
-                  <div class="cardd" style="--i:url(universidades/imgcarrera/1.png)">
-                  <div class="content">
-                      <br><center>
-                      <h2>Gastronomía<br><br><br><br></h2>
-                      <a href="LicGasUCari.php">Ver Detalles</a><br><br><br></center>
-                  </div>
-              </div>
-      </div>
-  </div>
+    <div class="d-flex justify-content-center flex-wrap gap-4 mt-1">
 
-  <div class="col-md-3">
-      <div class="card">
-                  <div class="cardd" style="--i:url(universidades/imgcarrera/2.png)">
-                  <div class="content">
-                  <br><center>
-                      <h2>Turismo Sustentable y Gestión Hotelera<br><br><br></h2>
-                      <a href="LicTSGH.php">Ver Detalles</a><br><br><br></center>
-                  </div>
-              </div>
-      </div>
-  </div>
+      @foreach ($datos->carreras as $carrera)
+      <div class="col-md-3">
+        <div class="card">
+                    <div class="cardd" style="--i:url({{asset("storage/".$carrera->logo)}})">
+                    <div class="content">
+                        <br><center>
+                        <h2>{{$carrera->nombre}}<br><br><br><br></h2>
+                        <a href="{{route("carrera",[$datos->slug,$carrera->slug])}}">Ver Detalles</a><br><br><br></center>
+                        @auth
+                          <a href="{{route("carrera.edit",$carrera->id)}}">Editar</a>    
+                          <form action="{{route("carrera.destroy",$carrera->id)}}" method="POST">
+                             @csrf
+                             @method("DELETE")
+                            <input type="submit" value="Eliminar">
+                          </form>
+                          @endauth
+                    </div>
+                </div>
+        </div>
+    </div>
+      @endforeach
+
+
+    </div>
+  
+
+   
+
+ 
 
 
   <center><h1 class="card-title"><br><br>Ubicación<br><br></h1></center>

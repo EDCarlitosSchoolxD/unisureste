@@ -20,7 +20,6 @@ class UniversidadRepository extends BaseRepository {
         ->join('municipalities','universities.id_municipio','=','municipalities.id')
         ->select('universities.*','municipalities.municipio')
         ->simplePaginate(10);
-        
         */
         return $this->model->with(["images"=> function($query){
             $query->take(1);
@@ -34,4 +33,5 @@ class UniversidadRepository extends BaseRepository {
     }
    
 
+    
 }

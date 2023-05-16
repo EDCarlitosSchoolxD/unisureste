@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CarreraRepository;
 use App\Repositories\EstadoRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\UniversidadRepository;
@@ -13,12 +14,14 @@ class ViewRenderController extends Controller
     private $municipioRepository;
     private $estadoRepository;
     private $universidadRepository;
+    private $carreraRepository;
 
-    public function __construct(MunicipioRepository $municipioRepository, EstadoRepository $estadoRepository,UniversidadRepository $universidadRepository)
+    public function __construct(MunicipioRepository $municipioRepository, EstadoRepository $estadoRepository,UniversidadRepository $universidadRepository,CarreraRepository $carreraRepository)
     {
         $this->municipioRepository = $municipioRepository;
         $this->estadoRepository = $estadoRepository;
         $this->universidadRepository = $universidadRepository;
+        $this->carreraRepository = $carreraRepository;
     }
 
     public function home(){
@@ -39,5 +42,16 @@ class ViewRenderController extends Controller
         $datos = $this->universidadRepository->getCarrerasWhereSlug($slug);
 
         return view("universidad",["datos" => $datos]);
+    }
+
+    public function carrera($slug,$slug2){
+        
+        $universidad = $this->universidadRepository->getWhereSlugOne($slug);
+        $carrera = $this->carreraRepository->getWhereIdUniversidad($universidad->id);
+
+        return view("carrera",[
+            "datos" => $carrera,
+        ]);
+        
     }
 }

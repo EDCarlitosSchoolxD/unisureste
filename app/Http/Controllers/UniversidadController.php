@@ -89,7 +89,7 @@ class UniversidadController extends Controller
 
         if($request->hasFile('logo')){
             // Guardamos la imagen en Disco
-            $datosRequest['logo'] = $request->file('logo')->store('estados','public');
+            $datosRequest['logo'] = $request->file('logo')->store('universidades','public');
 
         }
 

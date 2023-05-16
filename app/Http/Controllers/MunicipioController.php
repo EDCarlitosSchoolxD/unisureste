@@ -70,7 +70,7 @@ class MunicipioController extends Controller
             $datosObj->slug = Str::slug($request->nombre);
 
             //Se guarda en Base de Datos el Municipio
-            $this->estadoRepository->save($datosObj);
+            $this->municipioRepository->save($datosObj);
         }
 
         return redirect()->route('admin.municipios');

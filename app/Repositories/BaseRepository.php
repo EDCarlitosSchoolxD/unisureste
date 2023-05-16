@@ -48,6 +48,8 @@ class BaseRepository{
         return $model;
     }
 
-
+    public function getWhereSlugOne($slug){
+        return $this->model->where("slug",'=',$slug)->first();
+    }
 
 }

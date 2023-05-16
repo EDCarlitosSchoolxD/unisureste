@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Carrera extends Model
 {
 
-
-    public $fillable = ['nombre','slug','descripcion','perfil_ingreso','perfil_egreso','plan_estudio','tipo','id_universidad'];
+    public $timestamps = false;
+    public $fillable = ['nombre','slug','descripcion',"likes",'perfil_ingreso','perfil_egreso','plan_estudio','tipo','id_universidad','logo'];
 
     use HasFactory;
 

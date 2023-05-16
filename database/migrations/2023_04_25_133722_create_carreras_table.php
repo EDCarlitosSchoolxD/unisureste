@@ -19,18 +19,20 @@ return new class extends Migration
 
 
             //Datos informativos
-            $table->longText('descripcion');
-            $table->longText('perfil_ingreso');
-            $table->longText('perfil_egreso');
+            $table->longText('descripcion')->nullable();
+            $table->longText('perfil_ingreso')->nullable();
+            $table->longText('perfil_egreso')->nullable();
 
             
-            $table->longText('plan_estudio');
+            $table->longText('plan_estudio')->nullable();
 
 
             $table->integer('likes');
+            $table->string("logo");
             $table->string('tipo',100);
             $table->unsignedBigInteger('id_universidad');
-            $table->unsignedBigInteger('id_carrera');
+
+
 
 
             $table->foreign('id_universidad')->references('id')->on('universidads')->onDelete('cascade');
