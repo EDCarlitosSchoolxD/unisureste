@@ -14,7 +14,7 @@
               <span class="visually-hidden"></span>
             </a>
             <li class="nav-item">
-            <a class="nav-link" href="<?php echo "TILIN";?>/yucatan/index.php"><font size=4>Campeche</font></a>
+            <a class="nav-link" href="{{route("municipios","campeche")}}"><font size=4>Campeche</font></a>
           </li>
           </li>
           <li class="nav-item">
