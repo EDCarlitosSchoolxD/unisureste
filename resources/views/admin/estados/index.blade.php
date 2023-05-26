@@ -63,7 +63,7 @@
                     </td>
                     
                     <td class="w-32 h-32">
-                        <img class="w-full h-full object-contain" src="{{asset('storage/'.$estado->image->ruta)}}"  alt="Apple Watch">
+                        <img class="w-full h-full object-contain" src="{{asset('storage/'.$estado->images[0]->ruta)}}"  alt="Estado">
                     </td>
                     
                     <td class="px-6 py-4">

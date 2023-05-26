@@ -2,18 +2,12 @@
 
 <div id="carouselExampleControls"  class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-      <div  class="carousel-item active">
-        <img src="{{asset("img/quintana/1.png")}}" class="d-block w-100" alt="Imagen de Quintana Roo">
-      </div>
-      <div class="carousel-item">
-        <img src="{{asset("img/quintana/1.png")}}" class="d-block w-100" alt="Imagen de Quintana Roo">
-      </div>
-      <div class="carousel-item">
-        <img src="{{asset("img/quintana/1.png")}}" class="d-block w-100" alt="Imagen de Quintana Roo">
-      </div>
-      <div class="carousel-item">
-        <img src="{{asset("img/quintana/1.png")}}" class="d-block w-100" alt="Imagen de Quintana Roo">
-      </div>
+      @for ($i = 0; $i < count($datos->images); $i++)
+        <div  class="carousel-item {{$i ==1?"active":""}}">
+          <img src="{{asset("storage/".$datos->images[$i]->ruta)}}" class="d-block w-100" alt="Imagen de Quintana Roo">
+        </div>
+      @endfor
+      <
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -31,7 +25,7 @@
 
         <p><br><br></p>
 
-        <center><h1 class="display-3">Universidades de Quintana Roo<br><br></h1></center>
+        <center><h1 class="display-3">Universidades de {{$datos->nombre}}<br><br></h1></center>
         <p class="lead">En este apartado se encuentran los municipios de Quintana Roo en donde hay universidades. En total hay 23 universidades repartidas por el estado, pero consentradas mayormente en el municipio de Benito Juarez.<br><br><br></p>
 
 <center><h3 class="display-5">Municipios de {{$datos->nombre}}</h3></center>

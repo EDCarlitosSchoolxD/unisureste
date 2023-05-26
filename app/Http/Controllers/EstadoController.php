@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Estado;
 use App\Models\Image;
+use App\Models\ImageEstado;
 use App\Repositories\EstadoRepository;
-use App\Repositories\ImageRepositories;
-use App\Repositories\ImageRepository;
+use App\Repositories\ImageEstadoRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,21 +14,20 @@ class EstadoController extends Controller
 {
 
     private $estadoRepository;
-    private $imageReository;
+    private $imageEstadoRepository;
 
-    public function __construct(EstadoRepository $estadoRepository,ImageRepository $imageReository)
+    public function __construct(EstadoRepository $estadoRepository, ImageEstadoRepository $imageEstadoRepository)
     {
         $this->estadoRepository = $estadoRepository;
-        $this->imageReository = $imageReository;
+        $this->imageEstadoRepository = $imageEstadoRepository;
     }
     
 
     //
 
     public function index(){
-        $data =$this->estadoRepository->allWithImage();
 
-      
+        $data = $this->estadoRepository->allWithOneImage();
         return view("admin.estados.index",["data" => $data]);
     }
 
@@ -52,30 +51,30 @@ class EstadoController extends Controller
 
         $this->validate($request,[
             'nombre' => ['required','unique:estados'],
-            'image' => ['image','required'],
+            "image" => ["required","array"],
+            "images.*" => ["image"]
         ]);
 
 
-        $datos = request()->except('_token');
+        $datosRequest = request()->except('_token');
+        $datosRequest["slug"] = Str::slug($request->nombre);
         
-
-
-        // Revisa si se envia la imagen
         if($request->hasFile('image')){
+            
+            $estado = new Estado($datosRequest);
+            $estado = $this->estadoRepository->save($estado);
 
-            // Guardamos la imagen
-            $image['ruta'] = $request->file('image')->store('estados','public');
-            $imageObj = new Image($image);
-            //Guardamos la imagen a base de datos
-            $this->imageReository->save($imageObj);
 
-            // Creamos un Objeto estado y colocamos el ID de la image
-            $datosObj = new Estado($datos);
-            $datosObj->id_image = $imageObj->id;
-            $datosObj->slug = Str::slug($request->nombre);
+            foreach ($request->file("image") as $image) {
+                // Guardamos la imagen
+                $imageD['ruta'] = $image->store('estados','public');
+                $imageObj = new ImageEstado($imageD);
+                //Guardamos la imagen a base de datos
+                $imageObj["id_estado"] = $estado->id;
+                $this->imageEstadoRepository->save($imageObj);
 
-            //Se guarda en Base de Datos el Estado
-            $this->estadoRepository->save($datosObj);
+            }
+
         }
 
         return redirect()->route('admin.estados');
@@ -84,34 +83,38 @@ class EstadoController extends Controller
     public function update(Request $request,int $id){
         $this->validate($request,[
             'nombre' => ['required'],
-            'image' => ['image'],
+            "image" => ["required","array"],
+            "images.*" => ["image"]
         ]);
 
         $estadoFind = $this->estadoRepository->get($id);
 
         $datos = request()->except('_token','_method','image');
 
-        // Setteamos los valores
-        $datos['id_image'] = $estadoFind->id_image;
         //Se coloca el SLUG
         $datos['slug'] = Str::slug($request->nombre);
 
         // Revisa si se envia la imagen
-        if($request->hasFile('image')){
+        if($request->hasFile("image")){
+            $images = $this->imageEstadoRepository->getWhereIdEstado($estadoFind->id);
+            
+            //Borramos todas las imagenes
+            foreach ($images as $image) {
+                Storage::delete("public/".$image->ruta);
+                $image->delete();
+            }
 
-            //Buscamos la imagen en la base de datos
-            $imageFind = $this->imageReository->get($estadoFind->id_image);
-
-            //Eliminamos la imagen de Disco
-            Storage::delete('public/'.$imageFind->ruta);
-
-            // Guardamos la imagen en Disco
-            $image['ruta'] = $request->file('image')->store('estados','public');
-            $image['id'] = $imageFind->id;
-
-            //Guardamos la imagen a base de datos
-            $this->imageReository->updateDB($image,$imageFind->id);       
+            // Guardamos las imagenes
+            foreach($request->file("image") as $image){
+                // Guardamos la imagen
+                $imageD['ruta'] = $image->store('estados','public');
+                $imageObj = new ImageEstado($imageD);
+                //Guardamos la imagen a base de datos
+                $imageObj["id_estado"] = $estadoFind->id;
+                $this->imageEstadoRepository->save($imageObj);
+            }
         }
+
         //Se guarda en Base de Datos el Estado
         $this->estadoRepository->updateDB($datos,$id);
 
@@ -122,16 +125,18 @@ class EstadoController extends Controller
 
     public function destroy($id){
 
+
         $estado = $this->estadoRepository->get($id);
-        $image = $this->imageReository->get($estado->id_image);
 
-        Storage::delete('public/'.$image->ruta);
+        $images = $this->imageEstadoRepository->getWhereIdEstado($estado->id);
+        
+        Storage::delete("public/".$estado->logo);
 
 
-        if($estado){
-            $estado->delete();
+        foreach($images as $image){
+            Storage::delete("public/".$image->ruta);
         }
-
+        $estado->delete();
         
         return redirect()->route("admin.estados");
     }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Estado extends Model
 {
     public $timestamps = false;
-    public $fillable = ['nombre','id_image','slug'];
+    public $fillable = ['nombre','slug'];
 
     use HasFactory;
 
@@ -17,8 +17,10 @@ class Estado extends Model
         return $this->hasMany(Municipio::class,'id_estado','id');
     }
 
-    public function image(){
-        return $this->belongsTo(Image::class,'id_image');
+   
+
+    public function images(){
+        return $this->hasMany(ImageEstado::class,'id_estado','id');
     }
 
 }
